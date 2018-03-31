@@ -1,0 +1,9 @@
+What is a Neural Network?
+In the nueral network combines Xs to be new features and connects the new features to output Y.
+Given the input Xs and output Ys, the middle features are generated/figured out.
+
+What is Supervised Learning?
+Given input and output to train. Types: Standard NN, CNN (image data), RNN (sequence data), Hybrid
+
+Structured Data: Each of the feature has a well defined meaning, Database data
+Unstructured Data: Audio, Image, Text

@@ -7,3 +7,43 @@ Given input and output to train. Types: Standard NN, CNN (image data), RNN (sequ
 
 Structured Data: Each of the feature has a well defined meaning, Database data
 Unstructured Data: Audio, Image, Text
+
+Driver Behind the Rise of Deep Learning:
+- Traiditional learning algorithm's performance is ceiled with large amount of data.
+- Small Neural Network's performance is already better than the traditional one. 
+- Larger Neural Network results in better performance.
+- Data
+-Computation
+-Algorithms	 e.g. Sigmoid -> ReLU , make gradient descent much faster!
+
+
+Label:
+m = amount of labeled data
+
+
+Problem: 
+Binary Classification
+e.g. a 64 x 64 pixels image = 3 layers (RGB) of 64 X 64 pixels = 64 X 64 X 3 = 12288(nx) input X -> y={0,1}
+			X is a nx*m matrix		X.shape = (nx,m)
+			Y is a 1*m matrix			Y.shape = (1,m)
+			
+			
+Logistic Regression
+Given x, want y_hat = P(y=1|x)
+Parameter: w		b
+Output: Sigmoid(w_transpose*x + b) = Sigmoid(z) = 1/(1+e^-z)			If z is large, Sigmoid(z) = 1	; If z is small, Sigmoid(z) = 0
+The job is to learn w and b such that the prediction is accurate.
+It turns out it would be easier to implement when just keeping b & w separate!!! (rather than treat b as x0)
+
+Logistic Regression Cost Function
+Given labels, want y_hat(i) = y(i)
+Loss function: 
+L(y_hat,y) = 1/2 * (y_hat - y)^2  <- not used in Logistic Regression
+L(y_hat,y) = -(ylog(y_hat) + (1-y)log(1-y_hat)) <- this is used
+If y = 1: L(y_hat,y) = -log(y_hat) <- want log(y_hat) to be large <- want y_hat be large
+If y = 0: L(y_hat,y) = log(1-y_hat) <- want log(1-y_hat) large <- want y_hat small
+[There are other functions giving similar characteristics, but this one is the best, explained in later chapter.]
+Cost function: J(w,b) = 1/m * Sum(L(y_hat(i),y(i))) = -1/m * Sum[y(i)log(y_hat(i)) + (1-y(i))log(1-y_hat(i))]
+
+
+

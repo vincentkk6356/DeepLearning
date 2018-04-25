@@ -184,11 +184,36 @@ Interpret y_hat = P(y=1|x)
 	log(P(y|x)) = -L        [maximum likelihood estimation]
 
 -----------------------------------------------------------------------------------------
-23. Neural Network Overview
+23,24,25,26,27. Neural Network Overview
 
+Input layer: a[0] = X   / layer 0 
+Hidden layer: not observed  a[1]
+Output layer: a[2] = y_hat
 
+[Don't count the input layer]
 
+A node: calculate z and a = sigmoid(z)  
+
+** W = [wT...] **
+
+Vectorize
 -----------------------------------------------------------------------------------------
+28. Activation Functions ?_?
+
+	tanh(z) = (e^z - e^-z)/(e^z + e^-z) (shifted version of sigmoid function) 
+	[almost always better than sigmoid function] 
+	[except for the output layer]
+	
+	ReLU(z) = max(0,z)
+
+Rules of Thumb:
+
+1. If output is 0 or 1, use sigmoid at output layer
+2. ReLU (solve the slow gradient descent problem; much faster)/ Leaky ReLU
+3. Never use sigmoid 
+4.
+
+
 -----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------

@@ -51,12 +51,12 @@ Cost function: J(w,b) = 1/m * Sum(L(y_hat(i),y(i))) = -1/m * Sum[y(i)log(y_hat(i
  8. Gradient Descent
  We use that cost function (logistic regression) because it is convex!(only 1 global minimum)
  
-w := w - a* dJ(w)/dw  [when coding, use {dw} to represent the derivative term]
-a: learning rate
+w := w - alpha* dJ(w)/dw  [when coding, use {dw} to represent the derivative term]
+alpha: learning rate
 If w > global minimum , w := smaller w
 If w < global minimum , w := larger w
  
-b := b - a* dJ(w,b)/db [when coding, use {db} to represent the derivative term]
+b := b - alpha* dJ(w,b)/db [when coding, use {db} to represent the derivative term]
 [Rule in calculus: if only one parameter, use {d}. otherwise, use the curved {d}]
 -----------------------------------------------------------------------------------------
 9,10. Derivatices
@@ -75,5 +75,126 @@ Backward Propagation!!!
 dJ/dv -> dv/da -> dJ/da
 [in coding, d(finalOutput)/d(var) = dvar]
 -----------------------------------------------------------------------------------------
-12. 
+13. Logistic Regression Derivatives
+
+y_hat = a = sigmoid(z)
+"da" = dL(a,y)/da = -y/a + (1-y)/(1-a)
+"dz" = dL/dz = a-y = dL/da * da/dz
+da/dz = a(1-a)
+dL/dw1 = "dw" = x1 * dz
+-----------------------------------------------------------------------------------------
+14. Gradient Descent on m Training Examples
+
+J=0, dw1=0, dw2=0, db=0
+
+For i = 1 to m,
+
+z = wTx +b
+a = sigmoid(z)
+J += [yloga + (1-y)log(1-a)]
+dz = a - y
+dw1 += x1 * dz
+dw2 += x1 * dz
+J/=m, dw1/=m, dw2/=m
+
+w1 := w1 - alpha * dw1
+w2 := w2 - alpha * dw2
+b := b - alpha * db
+
+Disadvantages: 
+	two for loops ( 1 to m ; for all features) -> inefficient
+
+Solution: 
+	Vectorization technique (getting rid for loop)
+-----------------------------------------------------------------------------------------
+15,16. Vectorization
+
+	z = np.dot(w,x) + b
+
+CPU & GPU -> SIMD - single instruction mulitple data (parallelism)
+
+Non-vectorized:
+	u = np.zeros((n,1))		
+	 for i in range(n):
+	  u[i] = math.exp(v[i])   
+	  
+Vectorized:
+	import numpy as np
+	u = np.exp(v)
+	np.log(v)
+	np.abs(v)
+	np.maximum(v,0)
+	
+Whenever you attempt to write a for loop, take a look at whether have a vectorized form.
+
+-----------------------------------------------------------------------------------------
+17. Vectorizing Logistic Regression
+	
+	z = np.dot(wT, X) + b      <-- b : broadcasting in python
+
+-----------------------------------------------------------------------------------------
+18. Vectorizing Logistic Regression's Gradient Computation
+
+dz(i) = a(i) - y(i)
+dZ = [dz(1), dz(2) ... dz(m)]
+A = [a(1), ... a(m)]
+Y = [y(1)...y(m)]
+
+dZ = A - Y
+
+db = 1/m np.sum(dZ)
+dw = 1/m XdZ_T
+
+Final:	
+1.	Z = np.dot(wT,X) + b
+2.	dw = 1/m XdZ_T
+3.	db = 1/m np.sum(dZ)
+4.	w := w - alpha* dw
+5.	b := b - alpha* dw
+
+-----------------------------------------------------------------------------------------
+19. Broadcasting in Python 
+
+	cal = A.sum(axis=0) [axis=0 -> vertically; axis=1 -> horizontally]
+	100*A/(cal.reshape(1,4)) [the reshape operation is cheap]
+	
+	[1,2,3,4] + 100 ==> [101,102,103,104]
+	(m,n) + (1,n) ==> (1,n) Copy to (m,n)
+	(m,n) + (m,1) ==> (m,1) Copy to (m,n)
+	
+
+-----------------------------------------------------------------------------------------
+20. Python-Numpy
+
+a = np.random.randn(5)   [a shape = (5,)] <- Don't use "rank 1 array"
+a = np.random.randn(5,1) -> a.shape = (5,1)
+a = np.random.randn(1,5) -> a.shape = (1,5)
+assert(a.shape == (5,1))
+a = a.reshape((5,1))
+
+-----------------------------------------------------------------------------------------
+21. Jupyter-iPython
+-----------------------------------------------------------------------------------------
+22. Logistic Regression Cost Function Explanation [?_?]
+
+Interpret y_hat = P(y=1|x)
+	If y=1 : P(y|x) = y_hat
+	If y=0 : P(y|x) = 1-y_hat
+	P(y|x) = y_hat^y * (1-y_hat)^(1-y)
+	log(P(y|x)) = -L        [maximum likelihood estimation]
+
+-----------------------------------------------------------------------------------------
+23. Neural Network Overview
+
+
+
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------

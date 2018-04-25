@@ -1,4 +1,4 @@
-What is a Neural Network?
+1. What is a Neural Network?
 In the nueral network combines Xs to be new features and connects the new features to output Y.
 Given the input Xs and output Ys, the middle features are generated/figured out.
 
@@ -28,22 +28,52 @@ e.g. a 64 x 64 pixels image = 3 layers (RGB) of 64 X 64 pixels = 64 X 64 X 3 = 1
 			Y is a 1*m matrix			Y.shape = (1,m)
 			
 			
-Logistic Regression
+6. Logistic Regression
 Given x, want y_hat = P(y=1|x)
 Parameter: w		b
 Output: Sigmoid(w_transpose*x + b) = Sigmoid(z) = 1/(1+e^-z)			If z is large, Sigmoid(z) = 1	; If z is small, Sigmoid(z) = 0
 The job is to learn w and b such that the prediction is accurate.
 It turns out it would be easier to implement when just keeping b & w separate!!! (rather than treat b as x0)
 
-Logistic Regression Cost Function
+7. Logistic Regression Cost Function
 Given labels, want y_hat(i) = y(i)
 Loss function: 
-L(y_hat,y) = 1/2 * (y_hat - y)^2  <- not used in Logistic Regression
+L(y_hat,y) = 1/2 * (y_hat - y)^2  <- not used in Logistic Regression (not a good choice, many local minimum)
 L(y_hat,y) = -(ylog(y_hat) + (1-y)log(1-y_hat)) <- this is used
 If y = 1: L(y_hat,y) = -log(y_hat) <- want log(y_hat) to be large <- want y_hat be large
 If y = 0: L(y_hat,y) = log(1-y_hat) <- want log(1-y_hat) large <- want y_hat small
 [There are other functions giving similar characteristics, but this one is the best, explained in later chapter.]
 Cost function: J(w,b) = 1/m * Sum(L(y_hat(i),y(i))) = -1/m * Sum[y(i)log(y_hat(i)) + (1-y(i))log(1-y_hat(i))]
 
+ Loss function -> single training sample
+ Cost function -> parameter (w,b)
+-----------------------------------------------------------------------------------------
+ 8. Gradient Descent
+ We use that cost function (logistic regression) because it is convex!(only 1 global minimum)
+ 
+w := w - a* dJ(w)/dw  [when coding, use {dw} to represent the derivative term]
+a: learning rate
+If w > global minimum , w := smaller w
+If w < global minimum , w := larger w
+ 
+b := b - a* dJ(w,b)/db [when coding, use {db} to represent the derivative term]
+[Rule in calculus: if only one parameter, use {d}. otherwise, use the curved {d}]
+-----------------------------------------------------------------------------------------
+9,10. Derivatices
 
+-----------------------------------------------------------------------------------------
+11,12. Computation Graph
 
+J(a,b,c) = 3(a+bc)
+u = bc
+v = a+u
+J = 3v
+
+Comes in handy when you wanna minimize parameters
+Backward Propagation!!!
+
+dJ/dv -> dv/da -> dJ/da
+[in coding, d(finalOutput)/d(var) = dvar]
+-----------------------------------------------------------------------------------------
+12. 
+-----------------------------------------------------------------------------------------

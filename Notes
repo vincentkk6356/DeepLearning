@@ -205,20 +205,93 @@ Vectorize
 	[except for the output layer]
 	
 	ReLU(z) = max(0,z)
-
+	Leaky ReLU(z) = max(0.01z,z)
+	
 Rules of Thumb:
-
 1. If output is 0 or 1, use sigmoid at output layer
 2. ReLU (solve the slow gradient descent problem; much faster)/ Leaky ReLU
 3. Never use sigmoid 
-4.
+-----------------------------------------------------------------------------------------
+29. Why Non-Linear Activation Function?
 
+	Why not set a = z?
+	
+If we use a linear activation function, the result is just a linear function.
+-> more or less useless
+-> you can combine all the layers into one layer
+-> only use linear activation function in output layer makes sense
+-----------------------------------------------------------------------------------------
+30. Derivatives of Activation Functions
+
+Sigmoid derivative: g'(z) = g(z)(1-g(z)) = a(1-a)
+Tanh derivative: g'(z) = 1 - g(z)^2 = 1 - a^2
+ReLU derivative: g'(z) = 0 if z <0
+		 g'(z) = 1 if z >=0
+		 undefined if z = 0
+		
+Leaky ReLU derivative:  g'(z) = 0.01 if z <0
+		 	g'(z) = 1 if z >=0
+		 	
+-----------------------------------------------------------------------------------------
+31. Gradient Descent for Neural Networks
+
+Parameters: 
+w[1]: (n[1], n[0])
+b[1]: (n[1],1)
+
+Gradient descent:
+ Repeat {
+ 		compute predicts (y_hat, i=1..m)
+		dw[1] = dJ/dw[1], db[1]= dJ/db[1],...
+		W[1] := W[1] - alpha*dW[1]
+		b[1] := b[1] - alpha*db[1]
+		...
+	}
+
+Forward propagation:
+Z[1] = W[1]X + b[1]
+A[1] = g[1](Z[1])
+Z[2] = W[2]A[1] + b[2]
+A[2] = g[2](Z[2]) = Simoid(Z[2])
+
+Back propagation:
+dZ[2] = A[2] - Y	Y = [y(1)...y(m)]
+dW[2] = 1/m dZ[2]*A[1]_T
+db[2] = 1/m np.sum(dZ[2],axis = 1, keepdims = True)
+
+dZ[1] = W[2]_T dZ[2] * g[1]')(Z[1]) {both are (n(1),m) element-wise *}
+dW[1] = 1/m dZ[1]X_T
+db[1] = 1/m np.sum(dZ[1], axis = 1, keepdims = True)
+
+Intuition: see logistice regression 
 
 -----------------------------------------------------------------------------------------
+33. Random Initialization of Weights
+
+What happens if initializing the weights to be zero?
+	- Start off computing the same function/ same influence
+	- Symmetric (no matter how long we train it)
+	- Useless
+	
+Solution:
+	Random initialization 
+	W[1] = np.random.randn((2,2)) * 0.01 {if w is very big, it may end up landing on flat part of the curve -> slow training}
+	b[1] = np.zerp((2,1)) {- no symmetric problem}
+	...
+	b[2] = 0
 -----------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------
+34,35,36,37. Deep L-layer Neural Network Forward Propagation
+
+We cannot get rid of the for-loop for layers
+
+Representation:
+1. recognize edges -> face recognization
+2. early layers -> simple features e.g.edges-> later layers -> complex things e.g.face
+
+Circuit Theory:
+	There are functions you can compute with a "small" L-layer deep neural network that shallower networks require exponentially more hidden units to compute.
+	[functions are much easier to compute with deep network]
+
 -----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------

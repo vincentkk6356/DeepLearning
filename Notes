@@ -497,5 +497,186 @@ V[t]/(1-beta^t)   [when t is large -> no difference]
 -----------------------------------------------------------------------------------------
 61. Gradient Descent with Momentum
 
+Using larger learning rate -> overshoot
 
+Momentum:
+V(dW) = beta* V(dW) + (1-beta)*dW
+
+0.9 is most robust now
+(in practice no one bother bias correction) -> after 10 iteration -> already warm up
+
+W := W - alpha*V[dW]
+-----------------------------------------------------------------------------------------
+62. RMSprop (root mean squared prop)
+
+[exponential weighted average]
+S(dW) = beta* S(dW) + (1-beta)*d(W^2) <--small 
+S(db) = beta* S(db) + (1-beta)*d(b^2) <--large 
+W := W - alpha*(dW/sqrt(S[dW]))
+b := b - alpha*(db/sqrt(S[db]))
+
+Pro: can use larger alpha
+-----------------------------------------------------------------------------------------
+63. Adam Optimization Algorithm
+
+momentum + RMSprop + bias correction
+
+W := W - alpha*V[dW]/[sqrt(S[dW])+epsilon]
+
+Advantage: effective
+
+alpha: needs to be tune
+beta1: 0.9 (dw)
+beta2: 0.999 (dw^2)
+epsilon: 10^-8
+-----------------------------------------------------------------------------------------
+64. Learning Rate Decay
+
+Problem:
+- Never converge, if reduce alpha -> slow
+
+Solution:
+alpha = alpha_0/(1+ decay_rate*epochNum)
+alpha = alpha_0* 0.95^epochNum - exponentially decay
+alpha = k*alpha_0/sqrt(epochNum) - discrete staircase
+Manual decay
+
+-----------------------------------------------------------------------------------------
+65. The Problem of Local Optima 
+Since there are lots of dimension, local optima are not really a problem. The chance of getting a saddle point is extremely low.
+
+Problem: plateaus -> make learning slow
+
+-----------------------------------------------------------------------------------------
+66,67,68. Tunning Process ; Right Scale for Hyperparameters ?_?
+
+***alpha
+**momentum term beta~ 0.9
+**mini-batch size
+**#hidden units
+*#layers
+*learning rate decay
+
+Try random values: Don't use a grid
+Coarse to fine (also frequently used)
+
+
+
+
+-----------------------------------------------------------------------------------------
+73,74. Softmax Regression
+
+More than 2 classes
+
+Activation function:
+	t = e^z[l]
+	vector -> a[l] = t/Sum(t)  -> vector
+	
+Loss function: L(y^hat,y) = -Sum(ylog(y_hat))
+
+-----------------------------------------------------------------------------------------
+78. Orthogonalization
+
+Control things independently, separate effects
+
+Assumptions:
+(a) Fit training set well on cost function 		[Bigger network, Adam ...]   	(X_X)early stopping affects a&b
+(b) Fit dev set well on cost function			[Regularization, Bigger training set...]
+(c) Fit test set well on cost function			[Bigger dev set]
+(d) Performs well in real world				[Change dev set or cost function]
+
+
+-----------------------------------------------------------------------------------------
+79. Single Number Evaluation Metric
+
+Precision: how many examples recognized as cat, what % actually are cats?
+Recall: What % of actual cats are correctly recognized
+[often a trade-off]
+F1 score = "Average" of P and R = 2/(1/P + 1/R)
+
+Classifer	Precision	Recall		F1 Score
+A		95%		90%		92.4%
+B		98%		85%		91.0%
+
+Dev + Single Number Evaluation Metric -> speed up iterative process
+
+-----------------------------------------------------------------------------------------
+80. Satisfying and Optimizing Metrics
+
+Maximizing accuracy subject to runningTime <= 100ms
+
+N metrics: 1 optimizing, N-1 satisfying
+
+-----------------------------------------------------------------------------------------
+84. Why human-level performance?
+
+(a)Get labeled data from human
+(b) Gain insight from manual error analysis: Why did a person get this right?
+(c) Better analysis of bias/variance
+-----------------------------------------------------------------------------------------
+85. Avoidable Bias (difference between approx. Bayes error and training error)
+
+Human-level error as a proxy for Bayes error.
+
+dev error <-> training error  	: variance
+-----------------------------------------------------------------------------------------
+87. Surpassing Human-Level Performance
+
+(a) Online advertising
+(b) Product recommendations
+(c) Logistics (predicting transit ttime)
+(d) Loan approvals
+
+- Structural data
+- Not natural perception
+- Lots of data
+
+- Speech recognition
+- Some image recognition
+- Some medical
+-----------------------------------------------------------------------------------------
+90. Carrying Out Error Analysis
+-----------------------------------------------------------------------------------------
+95. Transfer Learning
+
+If data are not big:
+delete the last layer -> swap it to the new data
+
+If data are enough: 
+retrain 
+the original model is called pre-training
+
+[Can train more than 1 layer]
+
+When transfer learning makes sense:
+- Task A and B have the same input x
+- Have a lot more data for Task A than Task B
+- Low level features from A could be helpful for B
+-----------------------------------------------------------------------------------------
+96. Multi-Task Learning
+
+train all the features simultaneously is more effective than training separately
+Even some labels are missing, it also works
+
+When muli-task learning makes sense:
+- Training on set of tasks that could benefit from haveing shared lower-level features
+- Usually: Amount of data you have for each task is quite similar
+- Can train a big enough NN to do well on all the tasks
+-----------------------------------------------------------------------------------------
+97,98. End-to-End Deep Learning
+
+Data vs Hand-design (inject knowledge)
+
+Pros: 
+- Let the data speak	x->y
+- Less hand-designing of components needed
+
+Cons:
+- May need large amount of data
+- Excludes potentially useful hand-designed components (which could be very useful)
+
+Key question:	Do you have sufficient data to learn a function of the complexity needed to map x -> y
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------

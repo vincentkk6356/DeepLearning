@@ -409,6 +409,7 @@ similar scale -> easier and faster to optimize J  e.g. gradient descent/ oversho
 -----------------------------------------------------------------------------------------
 52. Vanishing/Exploding Gradients
 
+[numerical problems]
 W > I  : Explode
 W < I : Vanish
 -----------------------------------------------------------------------------------------

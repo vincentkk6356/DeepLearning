@@ -1,0 +1,72 @@
+2. Notation
+
+x<1>, x<2> .... x<t>
+Length = Tx , Ty 
+
+Representing words:
+- Vocabulary
+- One-one representation (all zero and 1 one in a vector)
+- if not in vocabulary -> create <unknown>
+
+----------------------------------------------------------------------------------------
+3. Recurrent Neural Network Model
+
+Why not a standard network?
+(a) Inputs, outputs can be different lengths in different examples 
+[if have max length, can pad to the max length -> not a gd practice]
+(b) *Doesn't share features learned across different positions of text
+
+Recurrent Neural Network
+(a) the parameters are shared (w)
+(b) only use the earlier sequence information to do the prediction
+e.g.  He said, "Teddy Roosevelt was a great President."
+      He said, "Teddy bears are on sale!"
+      
+      
+ Forward Propagation  
+ (a) a<0>
+ (b) a<1> = g(W_aa * a<0> + w_ax * x<1> + b_a)  [tanh/ReLU]
+ (c) y_hat<1> = g(W_ya * a<1> + b_y)      [depends on the output, sigmoid(binary), softmax...]
+ (d) a<t> = g(W_aa * a<t-1> + w_ax * x<t> + b_a)  = g(W_a[a<t-1>,x<t>] + ba)  <== stack the w horizontally, stack a & x vertically
+ (e) y_hat<t> = g(W_ya * a<t> + b_y) = g(W_y * a<t> + b_y)
+ 
+ 
+----------------------------------------------------------------------------------------
+4. Backpropagation through time ?_?
+
+L<t>(y_hat<t>,y<t>) = -y<t>log(y_hat<t>) = (1-y<t>)log(1-y_hat<t>)
+L(y_hat,y) = Sum(L<t>(y_hat<t>,y<t>))
+----------------------------------------------------------------------------------------
+5. Different Types of RNN
+
+(a) many-to-many (fixed length)
+(b) many-to-one [e.g. sentiment classification]
+(c) one-to-many [e.g. music generation]
+(d) many-to-many (different length)
+(e) one-to-one (can just use a standard NN)
+----------------------------------------------------------------------------------------
+6. Language model and sequence generation
+
+What is language modelling?
+- tells the probability of a sentence to be the specific sentence
+- P(y<1>,y<2>...,y<Ty>)
+
+Training set: large corpus of english text
+<EOS> token -> indicate end of sentence
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------

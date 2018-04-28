@@ -27,7 +27,7 @@ e.g.  He said, "Teddy Roosevelt was a great President."
  (a) a<0>
  (b) a<1> = g(W_aa * a<0> + w_ax * x<1> + b_a)  [tanh/ReLU]
  (c) y_hat<1> = g(W_ya * a<1> + b_y)      [depends on the output, sigmoid(binary), softmax...]
- (d) a<t> = g(W_aa * a<t-1> + w_ax * x<t> + b_a)  = g(W_a[a<t-1>,x<t>] + ba)  <== stack the w horizontally, stack a & x vertically
+ (d) a<t> = g(W_aa * a<t-1> + w_ax * x<t> + b_a)  = g(W_a[a<t-1>,x<t>] + b_a)  <== stack the w horizontally, stack a & x vertically
  (e) y_hat<t> = g(W_ya * a<t> + b_y) = g(W_y * a<t> + b_y)
  
  
@@ -74,9 +74,51 @@ Character-level:
 - exploding can be very big [easier to spot e.g. NaN] <- gradient clipping
 
 ----------------------------------------------------------------------------------------
+9. Gated Recurrent Unit GRU (Simpler, easier to build a much bigger network)
+
+a<t> = g(W_a[a<t-1>,x<t>] + b_a) 
+
+c = memory cell
+c<t> = a<t>
+
+c~<t> = tanh(Wc[c<t-1>,x<t> + b_c)
+
+[decide if update] Gamma_u = sigmoid(Wc[c<t-1>,x<t> + b_u)
+
+c<t> = Gamma_u * c~<t> + (1-Gamma_u)*c<t-1> [element-wise operation]
+
+sigmoid -> easy to get values very close to 0/1 -> no vanishing gradient
+
+c<t> can be a vector [element-wise operation] => choose to change the bit
+
+
+Full GRU:
+c~<t> = tanh(Gamma_r, Wc[c<t-1>, x<t> + b_c)
+[how relevant is c<t-1> and c<t>] Gamma_r = sigmoid(Wc[c<t-1>,x<t> + b_r)
 ----------------------------------------------------------------------------------------
+10. LSTM long short term memory units (more flexible and powerful 3 gates, historically proven, default choice)
+
+c~<t> = tanh(Wc[a<t-1>,x<t> + b_c)
+(update gate)Gamma_u = sigmoid(Wc[a<t-1>,x<t> + b_u)
+(forget gate)Gamma_f = sigmoid(Wc[a<t-1>,x<t> + b_f)
+(output gate)Gamma_o = sigmoid(Wc[a<t-1>,x<t> + b_o)
+c<t> = Gamma_u * c~<t> + Gamma_f*c<t-1> [element-wise operation]
+a<t> = Gamma_o*c<t>
 ----------------------------------------------------------------------------------------
+11. Bidirectional RNN (BRNN)
+
+Add backward connection
+Acyclic graph
+
+usually with LSTM 
+
+cons: you need to consider the entire sequence before processing (e.g. wait for the persion stop talking)
 ----------------------------------------------------------------------------------------
+12. Deep RNNs
+
+For RNN, 3 layers are already quite a lot
+
+e.g. after 3 layers, having more layers but not connected horizontal connection
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------

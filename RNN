@@ -53,8 +53,26 @@ What is language modelling?
 
 Training set: large corpus of english text
 <EOS> token -> indicate end of sentence
+<UNK> token -> unknown vocab
+
+
+
 ----------------------------------------------------------------------------------------
+7. Sampling novel sequences
+
+Word-level
+
+
+Character-level:
+- no need to worry <UNK>
+- much longer sequence (cannot capture sequence long ago)
 ----------------------------------------------------------------------------------------
+8. Vanishing gradients with RNNs
+
+- not good at capturing long-term dependency
+- vanishing is a bigger problem
+- exploding can be very big [easier to spot e.g. NaN] <- gradient clipping
+
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------

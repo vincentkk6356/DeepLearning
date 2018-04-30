@@ -1,0 +1,86 @@
+1. What is Computer Vision?
+
+Problems:
+(a)Image classification
+(b)Object detection
+(c)Neural Style Transfer
+
+Obstacle:
+- inputs can get really big
+----------------------------------------------------------------------------------------------------------------------------------
+2. Edge Detection Example
+
+-filter/kernel
+
+-Sobel filter
+-Scharr filter
+-Backprop -> learn the nine weight -> get the filter
+----------------------------------------------------------------------------------------------------------------------------------
+3. Padding
+
+convolve -> (n-f+1) X (n-f+1)
+
+- dun wanna the image to shrink (shrinking output)
+- throwing away info from edge
+
+Valid convolution: no padding
+Same convolution: Pad so that output size is the same as the input size
+[n+2p-f+1=n] <- this is why we choose odd filter, also odd filter has a center position
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. Strided Convolution
+
+e.g. stride = 2 [2-step]
+
+input: n*n
+filter: f*f
+padding: p
+stride: s
+output: (n+2p-f)/s +1   X   (n+2p-f)/s +1 [round down if not integer, not calcuate]
+
+(A*B)*C = A*(B*C)
+----------------------------------------------------------------------------------------------------------------------------------
+6. Convolutions Over Volume
+
+n x n x n_c * f x f x n_x --> n-f+1  x  n-f+1  x  n_c'(# of filters)
+----------------------------------------------------------------------------------------------------------------------------------
+7. One layer of CNN
+-- the # of parameter remains constant no matter how big the image is
+----------------------------------------------------------------------------------------------------------------------------------
+9. Pooling Layers
+
+Max pooling: max of the numbers [no one know the real reason for which work well]
+Intuition: if the feature exists, keep a large number ==> if not exist, keep the max will also lead to small number
+[no parameter to learn]
+3D -> do it for each channel
+
+Average pooling: take the average [max pooling is used more often] [except for deep network->want to collapse]
+
+Hyperparameter: 
+1. filter size f
+2. stride s
+3. a bit to represent max or average pooling
+[4. padding <-usually not use padding]
+
+**Pooling apply to each channel --> output = .... x n_c **
+
+----------------------------------------------------------------------------------------------------------------------------------
+10. Convolutional Neural Network Example
+
+Convention1: CONV + POOL = 1layer
+Convention2: CONV + POOL = 2layer
+
+usually, height & width decrease
+channel increase
+
+Common pattern:
+CONV-POOL-CONV-POOL-FC-FC-FC-SOFTMAX
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------

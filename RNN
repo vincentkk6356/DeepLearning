@@ -120,11 +120,183 @@ For RNN, 3 layers are already quite a lot
 
 e.g. after 3 layers, having more layers but not connected horizontal connection
 ----------------------------------------------------------------------------------------
+13. Word representation
+
+V = [a,aaron,...,zulum<UNK>]  |V| = 10,000
+1-hot representation
+Problem:    inner product between vectors = 0 , no hint of which words are similar
+
+Featureized representation: word embedding
+e.g.
+Gender      Man = -1   Womean = 1  King = -0.95 Queen = 0.97      Apple = 0   Orange = 0.01
+
+      
+----------------------------------------------------------------------------------------
+14. Using word embeddings
+
+e.g. Named entity recognition 
+Sally Johnson is an orange farmer   
+Rober Lin is an apple farmer
+Rober Lin is a durian cultivator
+[orange, apple, durian are fruit; farmer,culrivator are career] => The first two words are probably names
+
+After using 1B-100B words, apply it to much smaller training set ==> transfer learning
+e.g. Transfer he knowledge learned using a huge amount of data to a task (name recognition)
+
+1. Learn word embeddings from large text corpus (1-100B words)  [or download pre-trained embedding online]
+2. Transfer embedding to new task with smaller training set (e.g. 100k words) [instead of using 100k one-hot vector, use 300 dense vector]
+3. Optional: Continue to finetune the word embeddings with new data [only important when the training data in task 2 is large]
+
+encoding <-> embedding (similar)
+----------------------------------------------------------------------------------------
+15. NLP Properties of word embeddings
+
+- Analogies:
+
+Man -> Woman      King -> ?
+
+e_man - e_woman = [-2, 0, 0, 0 ...]
+e_king - e_queen = [-2, 0, 0, 0 ...]
+
+e_man - e_woman = e_king - e_?
+
+Find word w: arg max_w sim(e_w, e_king - e_man + e_woman)
+
+[accuracy: 30 - 75%]
+
+Cosine similarity:
+sim(e_w, e_king - e_man + e_woman)
+sim(u,v) = u_T*v/||u||_2*||v||_h
+
+Euclidean distance also works (not common):
+||u-v||^2
+----------------------------------------------------------------------------------------
+16. NLP embedding matrix
+
+E(300,10k) ・ O_6257(10k,1) = e_6257  
+==> not efficient to use matrix multiplication because one-hot vector contains a lot of zero
+
+In practice, use specialized function to look up an embedding.
+
+----------------------------------------------------------------------------------------
+17. NLP Learning word embeddings
+
+I wamt a glass of orange ____.
+
+I:    O_4343 -> E -> e_4343
+want: O_9665 -> E -> e_9655
+.
+.
+.
+.
+
+Put e into a neural network -> Softmax
+(6 words -> 300 dimensions for each word -> 1800 dimensional vector input)
+
+Other context/target pairs:
+context: Last 4 words/ 4 words on left & right/ Last 1 word/ Nearby 1 word
+
+**skip gram**
+
+----------------------------------------------------------------------------------------
+18. NLP Word2Vec
+
+Context           Target
+orange            juice
+orange            glass
+orange            my
+
+skip gram -> purpose is to learn good word embeddings, not to solve the missing word problem ( not doing well )
+
+Model:
+Vocab size = 10,000k
+Context c ("orange") -> Target t ("juice")
+
+O_c -> E -> e_c -> O_softmax -> y_hat
+
+Softmax: p(t|c) 
+
+Problems: 
+- need to calcuate the sum of all vocabularies's (denominators)
+
+Solution:
+- hierarchical softmax --> every time it is just a binary classifier
+
+How to sample the context c?
+- sample uniformly at sample --> make some words appear frequently and some rarely
+- don't want the training dominated by those frequently occurring words
+- heuristic to balance
+
+----------------------------------------------------------------------------------------
+19. NLP Negative sampling
+
+pick a context word, pick a target word in the sentence
+pick k target words from volcabulary to form nagative sample
+k = 5-20 for smaller dataset
+k = 2-5 for larger dataset
+
+instead of train 10,000 -wg softmax -> we train 10,000 binary classification problem
+
+how to select negative examples:
+- sample according to the empirical frequency X
+- uniform distribution X
+- take in-between
+
+----------------------------------------------------------------------------------------
+20. NLP - GloVe word vectors (global vectors for word representation)   ?_?
+
+X(i,j) = #times i(t) appears in context of j(c)
+----------------------------------------------------------------------------------------
+21. NLP - Sentiment classification
+
+Simple model - ignore word order
+
+RNN - many-to-one
+----------------------------------------------------------------------------------------
+22. NLP - Debiasing word embeddings
+
+Man: Computer_Programmer      as    Woman: Homemaker
+Father: Doctor    as    Mother: Nurse
+
+Word embeddings can reflect gender, ethnicity, age, sexual orientation, and other biases of the text used to train the model.
+
+1. Identify bias direction
+
+2. Neutralize
+
+3. Equalize pairs
+----------------------------------------------------------------------------------------
+23. Sequence to sequence models - Basic models
+----------------------------------------------------------------------------------------
+24. Picking the most likely sentence
+
+
+greedy search - P(y_hat(i)|x) - not work well
+we need to maximize the joint probability instead
+
+Use approx. search since the search space is too large
+----------------------------------------------------------------------------------------
+25. Beam search
+
+(a)beam width
+B = 3  [if B=1, greedy seach]
+
+(b) consider the prob of the second word -> consider the joint prob.
+
+(c) only keep track of the top 3
+----------------------------------------------------------------------------------------
+26. Redinement to beam search
+
+Length normalization
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------
+29. Attention medoe - intuition
+
+difficult to memorize long squence -> breaking the text part by part
+
+bidirectional RNN to calculate the attention weight
+
++ attention weight
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------

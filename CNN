@@ -77,10 +77,217 @@ CONV-POOL-CONV-POOL-FC-FC-FC-SOFTMAX
 
 
 ----------------------------------------------------------------------------------------------------------------------------------
+11. Why Convolutions?
+
+(a)Parameter sharing: A feature detector that's useful in one part of the image is probably useful in another part of the image
+(b)Sparsity of connections: In each layer, each output value depends only on a small number of inputs 
+==>a lot fewer parameters
+==>allow it to be trained to have a smaller training data set
+==>less prone to be overfitting
+==>capture translation invariance
 ----------------------------------------------------------------------------------------------------------------------------------
+13. Classic Network
+
+LeNet-5: 
+60k parameters, n_H & n_W decreases, n_C increases
+CONV  POOL  CONV  POOL  FC  FC  OUTPUT
+
+AlexNet:
+- similar to LeNet, but much bigger
+- ~60M parameters
+- ReLU
+
+VGG-16:16 layers that have weight ~138M parameters
+(simplified the neural structure)
+CONV = 3x3 filter, s=1, same  MAX-POOL=2x2,s=2
+
+
 ----------------------------------------------------------------------------------------------------------------------------------
+14. Residual Networks(ResNets)
+
+- Residual block:
+  a[l+2] = g(z[l+2] + a[l]) => short-cut/ skip connection
+  
+ Pro:
+ (a) allow to train much deeper network (training error goes down when #layers increases)
 ----------------------------------------------------------------------------------------------------------------------------------
+15. Why Residual Network Works Well?
+
+- identity function is easy for Residual block to learn ==> would not hurt 
 ----------------------------------------------------------------------------------------------------------------------------------
+16. Network in Network and 1*1 Convolutions
+
+What does a 1X1 convolution do? [network of network]
+~ having a fully connected network
+- can used to shrink the channel
+- adding non-linearity -> allow more complex function
 ----------------------------------------------------------------------------------------------------------------------------------
+17,18. Inception Network
+
+Concatenate all the output (filter convolution)
+
+Problem: computational cost
+
+Solution: using 1X1 convolution (bottleneck layer)
 ----------------------------------------------------------------------------------------------------------------------------------
+20. Transfer Learning
+
+- create/train our own softmax layer
+- freeze the previous layers
+- can save the previous layers as a fixed function to disk (no need to compute everytime for each epoch)
+- if have a larger dataset, can freeze fewer layers
+
 ----------------------------------------------------------------------------------------------------------------------------------
+21. Data Augmentation
+
+(a) mirroring
+(b) random cropping
+(c) color shifting
+
+
+(rarely used) rotation/Shearing/local warpping
+
+
+Hard disk -> CPU thread: distortion to form mini-batch of data -> training
+----------------------------------------------------------------------------------------------------------------------------------
+22. The State of Computer Vision
+
+Data vs. Hand-engineering:
+- Labeled data
+- Hand engineered features/network architecture/other components
+
+Tips for doing well on benchmarks/winning competitions:
+(a)Ensembling: Train serveral networks independently and average their outputs (3-15 networks)[never use in production]
+(b)Multi-crop at test time: Run classifier on multiple versions of test images and average results
+
+----------------------------------------------------------------------------------------------------------------------------------
+23. Object Detection: Object Localization
+
+(a)Image classification (1object)
+(b)Clasification with localization (1object)
+(c)Detection (multiple objects)
+----------------------------------------------------------------------------------------------------------------------------------
+26. Object Detection: Convolutional Implementation of Sliding Windows
+
+Turn FC into convolutional layers by 1X1 convolution
+
+share a lot of computation
+
+Problem: still, not accurate on bounding box prediction
+----------------------------------------------------------------------------------------------------------------------------------
+27. Object Detection: Bounding Box Prediction
+
+YOLO algorithm 
+[run very fast <- convolution operation only]
+----------------------------------------------------------------------------------------------------------------------------------
+28. Object Detection: Intersection Over Union
+
+Evaluating object localization:
+IoU = size of actual bounding box/size of predicting bounding box
+correct if IoU >= 0.5
+----------------------------------------------------------------------------------------------------------------------------------
+29. Object Detection:Non-max Suppression
+
+(a)take the highest probability output
+(b)suppress that is not the max prob
+(c)Discard any with IoU >=0.5 with the max prob. box
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+30. Object Detection: Anchor Boxes
+
+(a)predefine different anchor box (shape)
+
+Each object in training image is assigned to grid cell that contains object's midpoint and anchor box for the grid cell with highest IoU
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+32. Object Detection: Region Proposal (R-CNN)
+
+YOLO problem: classify a lot of areas where nothing is there
+
+
+R-CNN: 
+figure out where potentially has object (segmentational algorithm) => still quite slow
+
+Fast R-CNN ==> use convolution operation on sliding window => still slow
+
+Faster R-CNN: Use convolution operation to propose regions ==> still quite slow
+
+----------------------------------------------------------------------------------------------------------------------------------
+33,34. Face Recognition
+
+One-Shot Learning: Learning from one example to recognize the person again
+
+Learning a "similarity" function ==> no need to retrain the network when there is a new member/ get rid of the one sample training problem
+d(img1,img2) = degree of difference between images
+If d(img1,img2)<= tar   "same"
+If d(img1,img2)> tar   "different"
+[Verification]
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+35. Face Recognition: Siamese Network
+
+d(x(1),x(2)) = ||f(x(1))-f(x(2))||_2^2
+
+Learn parameters so that: 
+if x(i),x(j) are the same person, ||f(x(i))-f(x(j))||_2^2 is small
+if x(i),x(j) are not the same person, ||f(x(i))-f(x(j))||_2^2 is large
+----------------------------------------------------------------------------------------------------------------------------------
+36. Face Recognition: Triplet Loss (learn the similarity function)
+
+Want: ||f(A)-f(P)||^2/d(A,P) + alpha <= ||f(A)-f(N)||^2/d(A,N)
+      
+      ||f(A)-f(P)||^2 - ||f(A)-f(N)||^2  + alpha(margin)  <=0
+      
+Loss function: Given 3 images A,P,N
+
+L(A,P,N) = max(||f(A)-f(P)||^2 - ||f(A)-f(N)||^2  + alpha, 0)
+
+You need have several pictures of the same person
+
+During training, if A,P,N are chosen randomly, the inequality is easily satisfied
+Choose triplets that are hard to train on [d(A,P) is very close to d(A,N)
+----------------------------------------------------------------------------------------------------------------------------------
+37. Face Recognition: Face Verification and Binary Classification [another way to learn similarity function]
+
+Use Siamese Network to train:
+y^hat = sigmoid(sum(w_i|f(x(i))-f(x(j))| + b)
+----------------------------------------------------------------------------------------------------------------------------------
+38,39. Neural Style Transfer: What are deep ConvNets Learning?
+
+Pick a unit in layer1. Find the nine image patches that maximize the unit's activation. 
+Repeat for other units.
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+40. Neural Style Transfer: Cost Function
+
+J(Generated Image) = alpha * J_content(C,G) + beta * J_style(S,G)
+
+(a) Initiate G randomly
+(b) Use gradient descent to minimize J(G)
+(c) G := G - alpha/2G J(G)
+
+----------------------------------------------------------------------------------------------------------------------------------
+41. Neural Style Transfer: Content Cost Function
+
+- Say you use hidden layer l to compute content cost
+- Usually l is chosen to be the middle (neither too shallow or too deep)
+- Use pre-trained ConvNet (e.g. VGG network)
+- if a[l][C] and a[l][G] are similar, both images have similar content
+
+J_content(C,G) = 1/2 ||a[l][C]-a[l][G]||^2
+----------------------------------------------------------------------------------------------------------------------------------
+42. Neural Style Transfer: Style Cost Function
+
+Meaning of "style":
+say you are using layer l's activation to measure "style".
+Define style as correlation between activations across channels.
+
+    How correlated are the activations across different channels?
+----------------------------------------------------------------------------------------------------------------------------------
+43. 

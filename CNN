@@ -289,5 +289,14 @@ say you are using layer l's activation to measure "style".
 Define style as correlation between activations across channels.
 
     How correlated are the activations across different channels?
+    
+    
+Style Matrix/Gram Matrix:
+
+Let a[l]_i,j,k = activation at (i,j,k). G[l] is n[l]_c X n[l]_c
+
+G[l]_kk' 
+
+J[l]_style(S,G) = ||G[l](s) = G[l](G)||_F^2
 ----------------------------------------------------------------------------------------------------------------------------------
-43. 
+43. 1D and 3D Generalization of Models

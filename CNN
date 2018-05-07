@@ -238,7 +238,7 @@ if x(i),x(j) are not the same person, ||f(x(i))-f(x(j))||_2^2 is large
 ----------------------------------------------------------------------------------------------------------------------------------
 36. Face Recognition: Triplet Loss (learn the similarity function)
 
-Want: ||f(A)-f(P)||^2/d(A,P) + alpha <= ||f(A)-f(N)||^2/d(A,N)
+Want: ||f(A)-f(P)||^2 + alpha <= ||f(A)-f(N)||^2
       
       ||f(A)-f(P)||^2 - ||f(A)-f(N)||^2  + alpha(margin)  <=0
       
